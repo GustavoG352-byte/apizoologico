@@ -1,0 +1,2 @@
+PORT=3000
+mongo_uri=mongodb://straga:JKFT3hVQzZCiK3af@ac-o0khtxl-shard-00-00.ewkbufa.mongodb.net:27017,ac-o0khtxl-shard-00-01.ewkbufa.mongodb.net:27017,ac-o0khtxl-shard-00-02.ewkbufa.mongodb.net:27017/?ssl=true&replicaSet=atlas-x4pimc-shard-0&authSource=admin&appName=Cluster0
