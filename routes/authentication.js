@@ -16,20 +16,25 @@ router.post('/signup', async (req, res) => {
 });
 //inicio de sesión
 router.post("/login", async (req, res) => {
-    // validaciones
+    const { correo, clave } = req.body;
+    
+    // Buscar usuario por correo
+    const user = await userSchema.findOne({ correo });
+    if (!user) {
+        return res.status(404).json({ message: "El usuario no existe" });
+    }
 
-    const { usuario, correo, clave } = req.body;
-    const user = new userSchema({
-        usuario: usuario,
-        correo: correo,
-        clave: clave,
+    // Validar contraseña
+    const validClave = await user.validateClave(clave);
+    if (!validClave) {
+        return res.status(401).json({ auth: false, token: null, message: "Contraseña incorrecta" });
+    }
+
+    // Generar token
+    const token = jwt.sign({ id: user._id }, process.env.SECRET || 'secretkey', {
+        expiresIn: 60 * 60 * 24, // un día
     });
-    user.clave = await user.encryptClave(user.clave);
-    await user.save(); //save es un método de mongoose para guardar datos en MongoDB //segundo parámetro: un texto que hace que el código generado sea único //tercer parámetro: tiempo de expiración (en segundos, 24 horas en segundos)
-    //primer parámetro: payload - un dato que se agrega para generar el token
-    const token = jwt.sign({ id: user._id }, process.env.SECRET, {
-        expiresIn: 60 * 60 * 24, //un día en segundos
-    });
+
     res.json({
         auth: true,
         token,

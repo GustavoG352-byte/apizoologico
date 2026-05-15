@@ -16,6 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Rutas
 app.use("/api/animals", require("./routes/animalRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api", authRoutes);
 
 // Ruta base
